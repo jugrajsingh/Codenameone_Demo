@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="Data Entry" cloudDestinationProperty="Data Entry" layout="BorderLayout" borderLayoutAbsoluteCenter="false" title="Data Entry" >
+  <component type="List" name="List" cloudDestinationProperty="List" focusable="false"  selectedRenderer="listRenderer" unselectedRenderer="listRenderer selectedRendererEven="listRenderer" unselectedRendererEven="listRenderer" >
+    <layoutConstraint value="Center" />
+    <stringItem value="Item 1" />
+    <stringItem value="Item 2" />
+    <stringItem value="Item 3" />
+  </component>
+  <component type="Container" name="Container" cloudDestinationProperty="Container" layout="GridLayout" gridLayoutRows="1" gridLayoutColumns="2" >
+    <layoutConstraint value="South" />
+    <component type="Button" name="newEntryButton" cloudDestinationProperty="newEntryButton" text="New Entry" >
+    </component>
+    <component type="Button" name="saveButton" cloudDestinationProperty="saveButton" text="Save Changes" >
+    </component>
+  </component>
+</component>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="OwnerDetails" cloudDestinationProperty="OwnerDetails" layout="BoxLayout" boxLayoutAxis="Y" title="Details" >
+  <component type="Container" name="Container" cloudDestinationProperty="Container" layout="BoxLayout" boxLayoutAxis="Y" >
+    <component type="Label" name="Label" cloudDestinationProperty="Label" text="First Name" >
+    </component>
+    <component type="TextField" name="firstName" cloudBoundProperty="text" cloudDestinationProperty="firstName" text="" hint="Enter the First Name" >
+    </component>
+    <component type="Label" name="Label1" cloudDestinationProperty="Label1" text="Last Name" >
+    </component>
+    <component type="TextField" name="lastName" cloudBoundProperty="text" cloudDestinationProperty="lastName" text="" hint="Enter the Last Name" >
+    </component>
+    <component type="Label" name="Label2" cloudDestinationProperty="Label2" text="UserName" >
+    </component>
+    <component type="TextField" name="username" cloudBoundProperty="text" cloudDestinationProperty="username" text="" hint="Enter the User Name" >
+    </component>
+    <component type="Label" name="Label6" cloudDestinationProperty="Label6" text="Email" >
+    </component>
+    <component type="TextField" name="email" cloudBoundProperty="text" cloudDestinationProperty="email" text="" hint="Enter the Email Address" >
+    </component>
+    <component type="Container" name="Container4" cloudDestinationProperty="Container4" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
+      <component type="Label" name="Label7" cloudDestinationProperty="Label7" text="Date of Birth" >
+        <layoutConstraint value="West" />
+      </component>
+      <component type="Picker" name="datePicker" cloudDestinationProperty="datePicker" text="11/7/16" >
+        <layoutConstraint value="Center" />
+      </component>
+    </component>
+    <component type="Label" name="Label8" cloudDestinationProperty="Label8" text="Password" >
+    </component>
+    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="password" text="" hint="Enter the Password" >
+    </component>
+    <component type="TextField" name="repassword" cloudBoundProperty="text" cloudDestinationProperty="repassword" text="" hint="Re-Enter the Password" >
+    </component>
+    <component type="Label" name="Label3" cloudDestinationProperty="Label3" text="Gender" >
+    </component>
+    <component type="Container" name="Container2" cloudDestinationProperty="Container2" layout="GridLayout" gridLayoutRows="1" gridLayoutColumns="2" >
+      <component type="RadioButton" name="male" cloudDestinationProperty="male" text="Male" group="genderRadio" >
+      </component>
+      <component type="RadioButton" name="female" cloudDestinationProperty="female" text="Female" group="genderRadio" >
+      </component>
+    </component>
+    <component type="Container" name="Container3" cloudDestinationProperty="Container3" layout="BoxLayout" boxLayoutAxis="Y" >
+    </component>
+    <component type="Label" name="Label5" cloudDestinationProperty="Label5" text="Comments" >
+    </component>
+    <component type="ComponentGroup" name="ComponentGroup" cloudDestinationProperty="ComponentGroup" >
+      <component type="TextArea" name="comments" cloudBoundProperty="text" cloudDestinationProperty="comments" text="" columns="20" rows="6" >
+      </component>
+    </component>
+  </component>
+  <component type="Container" name="Container1" cloudDestinationProperty="Container1" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
+    <component type="Button" name="submit" cloudDestinationProperty="submit" text="Submit" >
+    </component>
+    <component type="Button" name="cancel" cloudDestinationProperty="cancel" text="Cancel" >
+    </component>
+  </component>
+</component>

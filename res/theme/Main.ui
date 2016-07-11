@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="Main" cloudDestinationProperty="Main" layout="BoxLayout" boxLayoutAxis="Y" title="Hi World" >
+  <component type="Button" name="gotodataentry" cloudDestinationProperty="gotodataentry" text="Go to Data Entry" >
+  </component>
+  <component type="Button" name="gotouserdetails" cloudDestinationProperty="gotouserdetails" text="Go to User Details" >
+  </component>
+  <component type="Button" name="scanit" cloudDestinationProperty="scanit" text="Scan QR Code" >
+  </component>
+  <component type="Button" name="loginbutton" cloudDestinationProperty="loginbutton" text="Login" >
+  </component>
+</component>

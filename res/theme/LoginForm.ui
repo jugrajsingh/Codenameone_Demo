@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="LoginForm" cloudDestinationProperty="LoginForm" layout="BorderLayout" borderLayoutAbsoluteCenter="false" title="Login or Signup" >
+  <component type="Tabs" name="Tabs" cloudDestinationProperty="Tabs" >
+    <layoutConstraint value="Center" />
+    <custom name="titles" type="java.lang.String" array="true" dimensions="1" >
+      <str>Login</str>
+      <str>Signup</str>
+    </custom>
+    <component type="Container" name="logincnt" tabTitle="Login" cloudDestinationProperty="Container" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
+      <component type="Container" name="logincontainer" cloudDestinationProperty="logincontainer" scrollableY="true" layout="FlowLayout" flowLayoutFillRows="true" flowLayoutAlign="1" flowLayoutValign="4" >
+        <layoutConstraint value="Center" />
+        <component type="ComponentGroup" name="ComponentGroup" cloudDestinationProperty="ComponentGroup" >
+          <component type="TextField" name="loginUsername" cloudBoundProperty="text" cloudDestinationProperty="loginUsername" text="" hint="Enter the Username" >
+          </component>
+          <component type="TextField" name="loginPassword" cloudBoundProperty="text" cloudDestinationProperty="loginPassword" text="" constraint="65536" hint="Enter the Password" >
+          </component>
+          <component type="Button" name="loginSubmit" cloudDestinationProperty="loginSubmit" text="Submit" >
+          </component>
+        </component>
+      </component>
+    </component>
+    <component type="Container" name="signupcnt" tabTitle="Signup" cloudDestinationProperty="Container1" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
+      <component type="Container" name="signupcontainer" cloudDestinationProperty="signupcontainer" scrollableY="true" layout="FlowLayout" flowLayoutFillRows="true" flowLayoutAlign="1" flowLayoutValign="4" >
+        <layoutConstraint value="Center" />
+        <component type="ComponentGroup" name="ComponentGroup1" cloudDestinationProperty="ComponentGroup1" >
+          <component type="TextField" name="signupFirstname" cloudBoundProperty="text" cloudDestinationProperty="signupFirstname" text="" hint="Enter Your First Name" >
+          </component>
+          <component type="TextField" name="signupLastname" cloudBoundProperty="text" cloudDestinationProperty="signupLastname" text="" hint="Enter Your Last Name" >
+          </component>
+          <component type="TextField" name="signupUsername" cloudBoundProperty="text" cloudDestinationProperty="signupUsername" text="" >
+          </component>
+          <component type="TextField" name="signupEmail" cloudBoundProperty="text" cloudDestinationProperty="signupEmail" text="" >
+          </component>
+          <component type="TextField" name="signupPassword" cloudBoundProperty="text" cloudDestinationProperty="signupPassword" text="" >
+          </component>
+          <component type="TextField" name="signupRePassword" cloudBoundProperty="text" cloudDestinationProperty="signupRePassword" text="" >
+          </component>
+          <component type="Container" name="Container4" cloudDestinationProperty="Container4" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
+            <component type="Label" name="Label7" cloudDestinationProperty="Label7" text="Date of Birth" >
+              <layoutConstraint value="West" />
+            </component>
+            <component type="Picker" name="signupdatePicker" cloudDestinationProperty="datePicker" text="11/7/16" >
+              <layoutConstraint value="Center" />
+            </component>
+          </component>
+          <component type="Container" name="Container2" cloudDestinationProperty="Container2" layout="GridLayout" gridLayoutRows="1" gridLayoutColumns="2" >
+            <component type="RadioButton" name="signupmale" cloudDestinationProperty="male" text="Male" group="genderRadio" >
+            </component>
+            <component type="RadioButton" name="signupfemale" cloudDestinationProperty="female" text="Female" group="genderRadio" >
+            </component>
+          </component>
+          <component type="Button" name="signupSubmit" cloudDestinationProperty="signupSubmit" text="Submit" >
+          </component>
+        </component>
+      </component>
+    </component>
+  </component>
+</component>
