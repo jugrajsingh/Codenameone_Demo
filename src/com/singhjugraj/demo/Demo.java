@@ -13,7 +13,7 @@ import com.codename1.ui.Toolbar;
  * of building native mobile applications using Java.
  */
 public class Demo {
-   
+
     private Form current;
 
     public void init(Object context) {
@@ -25,21 +25,21 @@ public class Demo {
     }
 
     public void start() {
-        if(current != null){
+        if (current != null) {
             current.show();
             return;
         }
-        new StateMachine("/theme");        
+        new StateMachine("/theme");
     }
 
     public void stop() {
         current = Display.getInstance().getCurrent();
-        if(current instanceof Dialog) {
-            ((Dialog)current).dispose();
+        if (current instanceof Dialog) {
+            ((Dialog) current).dispose();
             current = Display.getInstance().getCurrent();
         }
     }
-    
+
     public void destroy() {
     }
 }
