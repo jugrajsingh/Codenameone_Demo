@@ -786,6 +786,51 @@ public abstract class StateMachineBase extends UIBuilder {
         return cmp;
     }
 
+    public static final int COMMAND_MainGoToUserDetails = 2;
+    public static final int COMMAND_MainGoToDataEntry = 1;
+    public static final int COMMAND_MainLogin = 3;
+
+    protected boolean onMainGoToUserDetails() {
+        return false;
+    }
+
+    protected boolean onMainGoToDataEntry() {
+        return false;
+    }
+
+    protected boolean onMainLogin() {
+        return false;
+    }
+
+    protected void processCommand(ActionEvent ev, Command cmd) {
+        switch(cmd.getId()) {
+            case COMMAND_MainGoToUserDetails:
+                if(onMainGoToUserDetails()) {
+                    ev.consume();
+                    return;
+                }
+                break;
+
+            case COMMAND_MainGoToDataEntry:
+                if(onMainGoToDataEntry()) {
+                    ev.consume();
+                    return;
+                }
+                break;
+
+            case COMMAND_MainLogin:
+                if(onMainLogin()) {
+                    ev.consume();
+                    return;
+                }
+                break;
+
+        }
+        if(ev.getComponent() != null) {
+            handleComponentAction(ev.getComponent(), ev);
+        }
+    }
+
     protected void exitForm(Form f) {
         if("OwnerDetails".equals(f.getName())) {
             exitOwnerDetails(f);

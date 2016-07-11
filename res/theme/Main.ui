@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <component type="Form" name="Main" cloudDestinationProperty="Main" layout="BoxLayout" boxLayoutAxis="Y" title="Hi World" >
-  <component type="Button" name="gotodataentry" cloudDestinationProperty="gotodataentry" text="Go to Data Entry" >
+  <component type="Button" name="gotodataentry" cloudDestinationProperty="gotodataentry" commandName="Go to Data Entry" commandId="1" commandAction="Data Entry" commandBack="false" text="Go to Data Entry" >
   </component>
-  <component type="Button" name="gotouserdetails" cloudDestinationProperty="gotouserdetails" text="Go to User Details" >
+  <component type="Button" name="gotouserdetails" cloudDestinationProperty="gotouserdetails" commandName="Go to User Details" commandId="2" commandAction="OwnerDetails" commandBack="false" text="Go to User Details" >
   </component>
   <component type="Button" name="scanit" cloudDestinationProperty="scanit" text="Scan QR Code" >
   </component>
-  <component type="Button" name="loginbutton" cloudDestinationProperty="loginbutton" text="Login" >
+  <component type="Button" name="loginbutton" cloudDestinationProperty="loginbutton" commandName="Login" commandId="3" commandAction="LoginForm" commandBack="false" text="Login" >
   </component>
 </component>
