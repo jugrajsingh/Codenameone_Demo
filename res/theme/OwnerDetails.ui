@@ -28,9 +28,9 @@
     </component>
     <component type="Label" name="Label8" cloudDestinationProperty="Label8" text="Password" >
     </component>
-    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="password" text="" hint="Enter the Password" >
+    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="password" text="" constraint="65536" hint="Enter the Password" >
     </component>
-    <component type="TextField" name="repassword" cloudBoundProperty="text" cloudDestinationProperty="repassword" text="" hint="Re-Enter the Password" >
+    <component type="TextField" name="repassword" cloudBoundProperty="text" cloudDestinationProperty="repassword" text="" constraint="65536" hint="Re-Enter the Password" >
     </component>
     <component type="Label" name="Label3" cloudDestinationProperty="Label3" text="Gender" >
     </component>

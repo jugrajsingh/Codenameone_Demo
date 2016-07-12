@@ -28,13 +28,13 @@
           </component>
           <component type="TextField" name="signupLastname" cloudBoundProperty="text" cloudDestinationProperty="signupLastname" text="" hint="Enter Your Last Name" >
           </component>
-          <component type="TextField" name="signupUsername" cloudBoundProperty="text" cloudDestinationProperty="signupUsername" text="" >
+          <component type="TextField" name="signupUsername" cloudBoundProperty="text" cloudDestinationProperty="signupUsername" text="" hint="Enter Your Username" >
           </component>
-          <component type="TextField" name="signupEmail" cloudBoundProperty="text" cloudDestinationProperty="signupEmail" text="" >
+          <component type="TextField" name="signupEmail" cloudBoundProperty="text" cloudDestinationProperty="signupEmail" text="" hint="Enter Your Email" >
           </component>
-          <component type="TextField" name="signupPassword" cloudBoundProperty="text" cloudDestinationProperty="signupPassword" text="" >
+          <component type="TextField" name="signupPassword" cloudBoundProperty="text" cloudDestinationProperty="signupPassword" text="" hint="Enter Your Password" >
           </component>
-          <component type="TextField" name="signupRePassword" cloudBoundProperty="text" cloudDestinationProperty="signupRePassword" text="" >
+          <component type="TextField" name="signupRePassword" cloudBoundProperty="text" cloudDestinationProperty="signupRePassword" text="" hint="Re-Enter Your Password" >
           </component>
           <component type="Container" name="Container4" cloudDestinationProperty="Container4" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
             <component type="Label" name="Label7" cloudDestinationProperty="Label7" text="Date of Birth" >

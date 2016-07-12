@@ -28,6 +28,7 @@ import generated.StateMachineBase;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -73,18 +74,26 @@ public class StateMachine extends StateMachineBase {
             try {
                 JSONArray jArray = new JSONArray(responseString[0]);
                 JSONObject obj = jArray.getJSONObject(0);
-                JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
+                if (!obj.getString("user_data").equals("null")) {
+                    JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        Hashtable h = new Hashtable();
+                        h.put("type", object.getString("type"));
+                        h.put("data", object.getString("data"));
+                        a.add(h);
+                        cmp.setModel(new DefaultListModel(a));
+                    }
+                } else {
                     Hashtable h = new Hashtable();
-                    h.put("type", object.getString("type"));
-                    h.put("data", object.getString("data"));
+                    h.put("type", "Not Available");
+                    h.put("data", "Please add your First Entry");
                     a.add(h);
+                    cmp.setModel(new DefaultListModel(a));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            cmp.setModel(new DefaultListModel(a));
         }
         cmp.addPullToRefresh(new Runnable() {
             @Override
@@ -121,15 +130,15 @@ public class StateMachine extends StateMachineBase {
                 findFirstName().setText(jsonObject.getString("firstname"));
                 findLastName().setText(jsonObject.getString("lastname"));
                 findUsername().setText(jsonObject.getString("username"));
-                findPassword().setText(jsonObject.getString("userpass"));
-                findRepassword().setText(jsonObject.getString("userpass"));
+                findPassword().setText(jsonObject.getString("password"));
+                findRepassword().setText(jsonObject.getString("password"));
                 findEmail().setText(jsonObject.getString("email"));
                 if (jsonObject.getString("gender").equalsIgnoreCase("male")) {
                     findMale().setSelected(true);
                 } else {
                     findFemale().setSelected(true);
                 }
-                findComments().setText(jsonObject.getString("comment"));
+                findComments().setText(jsonObject.getString("comments"));
                 findDatePicker().setDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("dateofbirth")));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -174,5 +183,76 @@ public class StateMachine extends StateMachineBase {
         });
         dialog.setDisposeWhenPointerOutOfBounds(true);
         dialog.show();
+    }
+
+    @Override
+    protected void onOwnerDetails_SubmitAction(Component c, ActionEvent event) {
+        String requestBody;
+        try {
+            requestBody = "newusername=" + findUsername().getText();
+            requestBody = requestBody + "&password=" + findPassword().getText();
+            requestBody = requestBody + "&dob=" + findDatePicker().getText();
+            requestBody = requestBody + "&email=" + findEmail().getText();
+            requestBody = requestBody + "&firstname=" + findFirstName().getText();
+            requestBody = requestBody + "&lastname=" + findLastName().getText();
+            requestBody = requestBody + "&comments=" + findComments().getText();
+            String gender;
+            if (findMale().isSelected()) {
+                gender = "male";
+            } else {
+                gender = "female";
+            }
+            requestBody = requestBody + "&gender=" + gender;
+            String finalRequestBody = requestBody;
+            ConnectionRequest request = new ConnectionRequest() {
+                @Override
+                protected void buildRequestBody(OutputStream os) throws IOException {
+                    os.write(finalRequestBody.getBytes());
+                }
+            };
+            request.setUrl(Server_APIs.USERDETAILS + "?user=" + Server_APIs.USERNAME);
+            request.setContentType("application/x-www-form-urlencoded");
+            request.setPost(true);
+            InfiniteProgress ip = new InfiniteProgress();
+            Dialog dig = ip.showInifiniteBlocking();
+            request.setDisposeOnCompletion(dig);
+            NetworkManager.getInstance().addToQueueAndWait(request);
+            request.getResponseCode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDataEntry_SaveButtonAction(Component c, ActionEvent event) {
+        List list = findList(c);
+        Hashtable hashtable;
+        JSONArray array = new JSONArray();
+        ListModel model = list.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            hashtable = (Hashtable) model.getItemAt(i);
+            JSONObject object = new JSONObject();
+            try {
+                object.put("type", hashtable.get("type"));
+                object.put("data", hashtable.get("data"));
+                array.put(object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ConnectionRequest request = new ConnectionRequest() {
+            @Override
+            protected void buildRequestBody(OutputStream os) throws IOException {
+                String send = "data=" + array.toString();
+                os.write(send.getBytes());
+            }
+        };
+        request.setUrl(Server_APIs.USERDATA + "?user=" + Server_APIs.USERNAME);
+        request.setPost(true);
+        request.setContentType("application/x-www-form-urlencoded");
+        InfiniteProgress ip = new InfiniteProgress();
+        Dialog dig = ip.showInifiniteBlocking();
+        request.setDisposeOnCompletion(dig);
+        NetworkManager.getInstance().addToQueueAndWait(request);
     }
 }
