@@ -7,10 +7,25 @@
 
 package userclasses;
 
-import generated.StateMachineBase;
-import com.codename1.ui.*; 
-import com.codename1.ui.events.*;
+import ca.weblite.codename1.json.JSONArray;
+import ca.weblite.codename1.json.JSONException;
+import ca.weblite.codename1.json.JSONObject;
+import com.codename1.components.InfiniteProgress;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.NetworkManager;
+import com.codename1.io.Util;
+import com.codename1.ui.Dialog;
+import com.codename1.ui.Form;
+import com.codename1.ui.List;
+import com.codename1.ui.list.DefaultListModel;
 import com.codename1.ui.util.Resources;
+import com.singhjugraj.demo.Server_APIs;
+import generated.StateMachineBase;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  *
@@ -30,4 +45,49 @@ public class StateMachine extends StateMachineBase {
     protected void initVars(Resources res) {
     }
 
+
+    @Override
+    protected void beforeDataEntry(Form f) {
+        List cmp = findList();
+        final String[] responseString = {""};
+        ConnectionRequest request = new ConnectionRequest() {
+            @Override
+            protected void readResponse(InputStream input) throws IOException {
+                responseString[0] = Util.readToString(input);
+            }
+        };
+        request.setPost(false);
+        request.setUrl(Server_APIs.USERDATA);
+        request.addArgument("user", Server_APIs.USERNAME);
+        InfiniteProgress ip = new InfiniteProgress();
+        Dialog dig = ip.showInifiniteBlocking();
+        request.setDisposeOnCompletion(dig);
+        NetworkManager.getInstance().addToQueueAndWait(request);
+        int reqcode = request.getResponseCode();
+        if (reqcode == 200) {
+            ArrayList a = new ArrayList();
+            try {
+                JSONArray jArray = new JSONArray(responseString[0]);
+                JSONObject obj = jArray.getJSONObject(0);
+                JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    Hashtable h = new Hashtable();
+                    h.put("type", object.getString("type"));
+                    h.put("data", object.getString("data"));
+                    a.add(h);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            cmp.setModel(new DefaultListModel(a));
+        }
+        cmp.addPullToRefresh(new Runnable() {
+            @Override
+            public void run() {
+                beforeDataEntry(f);
+                f.revalidate();
+            }
+        });
+    }
 }
