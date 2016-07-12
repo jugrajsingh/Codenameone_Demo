@@ -16,11 +16,11 @@ import com.codename1.io.NetworkManager;
 import com.codename1.io.Util;
 import com.codename1.l10n.ParseException;
 import com.codename1.l10n.SimpleDateFormat;
-import com.codename1.ui.Dialog;
-import com.codename1.ui.Display;
-import com.codename1.ui.Form;
-import com.codename1.ui.List;
+import com.codename1.ui.*;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.DefaultListModel;
+import com.codename1.ui.list.ListModel;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import com.singhjugraj.demo.Server_APIs;
@@ -137,5 +137,42 @@ public class StateMachine extends StateMachineBase {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void onDataEntry_NewEntryButtonAction(Component c, ActionEvent event) {
+        Dialog dialog = new Dialog();
+        dialog.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+        Label labelenter = new Label("Enter Label");
+        Label labeldata = new Label("Enter Data ");
+        TextField enterLabel = new TextField();
+        enterLabel.setHint("Please Specify Label");
+        enterLabel.setColumns(45);
+        TextField enterData = new TextField();
+        enterData.setHint("Please Enter Data");
+        enterData.setColumns(45);
+        Button okButtonNewEntry = new Button("Ok");
+        Container container1 = new Container();
+        container1.setLayout(new BoxLayout(BoxLayout.X_AXIS));
+        container1.add(labelenter);
+        container1.add(enterLabel);
+        Container container2 = new Container();
+        container2.setLayout(new BoxLayout(BoxLayout.X_AXIS));
+        container2.add(labeldata);
+        container2.add(enterData);
+        dialog.add(container1);
+        dialog.add(container2);
+        dialog.add(okButtonNewEntry);
+        okButtonNewEntry.addActionListener(evt -> {
+            List list = findList(c);
+            ListModel model = list.getModel();
+            Hashtable hashtable = new Hashtable();
+            hashtable.put("type", enterLabel.getText());
+            hashtable.put("data", enterData.getText());
+            model.addItem(hashtable);
+            dialog.dispose();
+        });
+        dialog.setDisposeWhenPointerOutOfBounds(true);
+        dialog.show();
     }
 }
