@@ -47,7 +47,7 @@ public class StateMachine extends StateMachineBase {
      * this method should be used to initialize variables instead of
      * the constructor/class scope to avoid race conditions
      */
-    protected void initVars(Resources res) {
+    public void initVars(Resources res) {
     }
 
 

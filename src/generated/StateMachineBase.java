@@ -7,29 +7,56 @@
 */
 package generated;
 
+import com.codename1.io.Preferences;
 import com.codename1.ui.*;
-import com.codename1.ui.util.*;
-import com.codename1.ui.plaf.*;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.plaf.UIManager;
+import com.codename1.ui.util.Resources;
+import com.codename1.ui.util.UIBuilder;
+import com.singhjugraj.demo.Server_APIs;
+
 import java.util.Hashtable;
-import com.codename1.ui.events.*;
 
 public abstract class StateMachineBase extends UIBuilder {
-    private Container aboutToShowThisContainer;
+    public static final int COMMAND_MainGoToUserDetails = 2;
     /**
      * this method should be used to initialize variables instead of
      * the constructor/class scope to avoid race conditions
      */
-    /**
-    * @deprecated use the version that accepts a resource as an argument instead
-    
-**/
-    protected void initVars() {}
-
-    protected void initVars(Resources res) {}
+    public static final int COMMAND_MainGoToDataEntry = 1;
+    public static final int COMMAND_MainLogin = 3;
+    private Container aboutToShowThisContainer;
 
     public StateMachineBase(Resources res, String resPath, boolean loadTheme) {
         startApp(res, resPath, loadTheme);
     }
+
+    public StateMachineBase() {
+    }
+
+    public StateMachineBase(String resPath) {
+        this(null, resPath, true);
+    }
+
+    public StateMachineBase(Resources res) {
+        this(res, null, true);
+    }
+
+    public StateMachineBase(String resPath, boolean loadTheme) {
+        this(null, resPath, loadTheme);
+    }
+
+    public StateMachineBase(Resources res, boolean loadTheme) {
+        this(res, null, loadTheme);
+    }
+
+    /**
+    * @deprecated use the version that accepts a resource as an argument instead
+
+**/
+    protected void initVars() {}
+
+    protected void initVars(Resources res) {}
 
     public Container startApp(Resources res, String resPath, boolean loadTheme) {
         initVars();
@@ -73,7 +100,13 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
     protected String getFirstFormName() {
-        return "Main";
+        String username = Preferences.get("username", "DEFAULT");
+        if (username.equalsIgnoreCase("DEFAULT")) {
+            return "LoginForm";
+        } else {
+            Server_APIs.USERNAME = username;
+            return "Main";
+        }
     }
 
     public Container createWidget(Resources res, String resPath, boolean loadTheme) {
@@ -105,25 +138,6 @@ public abstract class StateMachineBase extends UIBuilder {
             if(themes != null && themes.length > 0) {
                 UIManager.getInstance().setThemeProps(res.getTheme(themes[0]));
             }
-    }
-
-    public StateMachineBase() {
-    }
-
-    public StateMachineBase(String resPath) {
-        this(null, resPath, true);
-    }
-
-    public StateMachineBase(Resources res) {
-        this(res, null, true);
-    }
-
-    public StateMachineBase(String resPath, boolean loadTheme) {
-        this(null, resPath, loadTheme);
-    }
-
-    public StateMachineBase(Resources res, boolean loadTheme) {
-        this(res, null, loadTheme);
     }
 
     public com.codename1.ui.Button findCancel(Component root) {
@@ -785,10 +799,6 @@ public abstract class StateMachineBase extends UIBuilder {
         }
         return cmp;
     }
-
-    public static final int COMMAND_MainGoToUserDetails = 2;
-    public static final int COMMAND_MainGoToDataEntry = 1;
-    public static final int COMMAND_MainLogin = 3;
 
     protected boolean onMainGoToUserDetails() {
         return false;
