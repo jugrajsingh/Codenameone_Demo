@@ -14,10 +14,14 @@ import com.codename1.components.InfiniteProgress;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.NetworkManager;
 import com.codename1.io.Util;
+import com.codename1.l10n.ParseException;
+import com.codename1.l10n.SimpleDateFormat;
 import com.codename1.ui.Dialog;
+import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.List;
 import com.codename1.ui.list.DefaultListModel;
+import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.util.Resources;
 import com.singhjugraj.demo.Server_APIs;
 import generated.StateMachineBase;
@@ -89,5 +93,49 @@ public class StateMachine extends StateMachineBase {
                 f.revalidate();
             }
         });
+    }
+
+    @Override
+    protected void beforeOwnerDetails(Form f) {
+        final String[] responseString = new String[1];
+        Picker picker = findDatePicker();
+        picker.setType(Display.PICKER_TYPE_DATE);
+        picker.setFormatter(new SimpleDateFormat("yyyy-MM-dd"));
+        ConnectionRequest request = new ConnectionRequest() {
+            @Override
+            protected void readResponse(InputStream input) throws IOException {
+                responseString[0] = Util.readToString(input);
+            }
+        };
+        request.setUrl(Server_APIs.USERDETAILS);
+        request.setPost(false);
+        request.addArgument("user", Server_APIs.USERNAME);
+        InfiniteProgress ip = new InfiniteProgress();
+        Dialog dig = ip.showInifiniteBlocking();
+        request.setDisposeOnCompletion(dig);
+        NetworkManager.getInstance().addToQueueAndWait(request);
+        if (request.getResponseCode() == 200) {
+            try {
+                JSONArray jArray = new JSONArray(responseString[0]);
+                JSONObject jsonObject = jArray.getJSONObject(0);
+                findFirstName().setText(jsonObject.getString("firstname"));
+                findLastName().setText(jsonObject.getString("lastname"));
+                findUsername().setText(jsonObject.getString("username"));
+                findPassword().setText(jsonObject.getString("userpass"));
+                findRepassword().setText(jsonObject.getString("userpass"));
+                findEmail().setText(jsonObject.getString("email"));
+                if (jsonObject.getString("gender").equalsIgnoreCase("male")) {
+                    findMale().setSelected(true);
+                } else {
+                    findFemale().setSelected(true);
+                }
+                findComments().setText(jsonObject.getString("comment"));
+                findDatePicker().setDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("dateofbirth")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
