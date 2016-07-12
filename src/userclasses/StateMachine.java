@@ -70,7 +70,7 @@ public class StateMachine extends StateMachineBase {
         NetworkManager.getInstance().addToQueueAndWait(request);
         int reqcode = request.getResponseCode();
         if (reqcode == 200) {
-            ArrayList a = new ArrayList();
+            ArrayList<Hashtable<String, String>> a = new ArrayList<>();
             try {
                 JSONArray jArray = new JSONArray(responseString[0]);
                 JSONObject obj = jArray.getJSONObject(0);
@@ -78,29 +78,26 @@ public class StateMachine extends StateMachineBase {
                     JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                        Hashtable h = new Hashtable();
+                        Hashtable<String, String> h = new Hashtable<>();
                         h.put("type", object.getString("type"));
                         h.put("data", object.getString("data"));
                         a.add(h);
-                        cmp.setModel(new DefaultListModel(a));
+                        cmp.setModel(new DefaultListModel<>(a));
                     }
                 } else {
-                    Hashtable h = new Hashtable();
+                    Hashtable<String, String> h = new Hashtable<>();
                     h.put("type", "Not Available");
                     h.put("data", "Please add your First Entry");
                     a.add(h);
-                    cmp.setModel(new DefaultListModel(a));
+                    cmp.setModel(new DefaultListModel<>(a));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        cmp.addPullToRefresh(new Runnable() {
-            @Override
-            public void run() {
-                beforeDataEntry(f);
-                f.revalidate();
-            }
+        cmp.addPullToRefresh(() -> {
+            beforeDataEntry(f);
+            f.revalidate();
         });
     }
 
@@ -140,9 +137,7 @@ public class StateMachine extends StateMachineBase {
                 }
                 findComments().setText(jsonObject.getString("comments"));
                 findDatePicker().setDate(new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("dateofbirth")));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
+            } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -175,7 +170,7 @@ public class StateMachine extends StateMachineBase {
         okButtonNewEntry.addActionListener(evt -> {
             List list = findList(c);
             ListModel model = list.getModel();
-            Hashtable hashtable = new Hashtable();
+            Hashtable<String, String> hashtable = new Hashtable<>();
             hashtable.put("type", enterLabel.getText());
             hashtable.put("data", enterData.getText());
             model.addItem(hashtable);
