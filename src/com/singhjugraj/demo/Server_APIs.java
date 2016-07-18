@@ -8,5 +8,7 @@ public class Server_APIs {
     public static String USERDATA = SERVERURL + "/userdata";
     public static String USERDETAILS = SERVERURL + "/userdetails";
     public static String NEWUSER = SERVERURL + "/newuser";
-    public static String USERNAME = "admin";
+    public static String INITIATE = SERVERURL + "/initiate";
+    public static String LOGIN = SERVERURL + "/login";
+    public static String USERNAME = "DEFAULT";
 }

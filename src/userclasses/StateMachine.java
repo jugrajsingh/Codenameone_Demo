@@ -13,6 +13,7 @@ import ca.weblite.codename1.json.JSONObject;
 import com.codename1.components.InfiniteProgress;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.NetworkManager;
+import com.codename1.io.Preferences;
 import com.codename1.io.Util;
 import com.codename1.l10n.ParseException;
 import com.codename1.l10n.SimpleDateFormat;
@@ -50,7 +51,6 @@ public class StateMachine extends StateMachineBase {
     public void initVars(Resources res) {
     }
 
-
     @Override
     protected void beforeDataEntry(Form f) {
         List cmp = findList();
@@ -73,23 +73,19 @@ public class StateMachine extends StateMachineBase {
             ArrayList<Hashtable<String, String>> a = new ArrayList<>();
             try {
                 JSONArray jArray = new JSONArray(responseString[0]);
-                JSONObject obj = jArray.getJSONObject(0);
-                if (!obj.getString("user_data").equals("null")) {
-                    JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        Hashtable<String, String> h = new Hashtable<>();
-                        h.put("type", object.getString("type"));
-                        h.put("data", object.getString("data"));
-                        a.add(h);
-                        cmp.setModel(new DefaultListModel<>(a));
+                if (jArray.length() > 0) {
+                    JSONObject obj = jArray.getJSONObject(0);
+                    if (!obj.getString("user_data").equals("null")) {
+                        JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
+                            Hashtable<String, String> h = new Hashtable<>();
+                            h.put("type", object.getString("type"));
+                            h.put("data", object.getString("data"));
+                            a.add(h);
+                            cmp.setModel(new DefaultListModel<>(a));
+                        }
                     }
-                } else {
-                    Hashtable<String, String> h = new Hashtable<>();
-                    h.put("type", "Not Available");
-                    h.put("data", "Please add your First Entry");
-                    a.add(h);
-                    cmp.setModel(new DefaultListModel<>(a));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -249,5 +245,157 @@ public class StateMachine extends StateMachineBase {
         Dialog dig = ip.showInifiniteBlocking();
         request.setDisposeOnCompletion(dig);
         NetworkManager.getInstance().addToQueueAndWait(request);
+    }
+
+    @Override
+    protected void onLoginForm_LoginSubmitAction(Component c, ActionEvent event) {
+        boolean empty = false;
+        if (!empty) {
+            final String[] responseString = new String[1];
+            String username = findLoginUsername().getText();
+            String password = findLoginPassword().getText();
+            ConnectionRequest request = new ConnectionRequest() {
+                @Override
+                protected void buildRequestBody(OutputStream os) throws IOException {
+                    String send = "user=" + username + "&password=" + password;
+                    os.write(send.getBytes());
+                }
+
+                @Override
+                protected void readResponse(InputStream input) throws IOException {
+                    responseString[0] = Util.readToString(input);
+                }
+            };
+            request.setUrl(Server_APIs.LOGIN);
+            request.setPost(true);
+            request.setContentType("application/x-www-form-urlencoded");
+            InfiniteProgress ip = new InfiniteProgress();
+            Dialog dig = ip.showInifiniteBlocking();
+            request.setDisposeOnCompletion(dig);
+            NetworkManager.getInstance().addToQueueAndWait(request);
+            if (request.getResponseCode() == 200) {
+                try {
+                    JSONArray jArray = new JSONArray(responseString[0]);
+                    if (jArray.length() == 1) {
+                        JSONObject obj = jArray.getJSONObject(0);
+                        Preferences.set("username", obj.getString("username"));
+                        Server_APIs.USERNAME = username;
+                        showForm("Main", null);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onLoginForm_SignupSubmitAction(Component c, ActionEvent event) {
+        boolean empty = false;
+        if (!empty) {
+            final String[] responseString = new String[1];
+            String username = findSignupUsername().getText();
+            String password = findSignupPassword().getText();
+            String email = findSignupEmail().getText();
+            String fname = findSignupFirstname().getText();
+            String lname = findSignupLastname().getText();
+            String date = findSignupdatePicker().getText();
+            String gender;
+            if (findSignupmale().isSelected()) {
+                gender = "male";
+            } else {
+                gender = "female";
+            }
+            boolean available = false;
+            ConnectionRequest request = new ConnectionRequest() {
+                @Override
+                protected void buildRequestBody(OutputStream os) throws IOException {
+                    String send = "user=" + username + "&password=" + password;
+                    os.write(send.getBytes());
+                }
+
+                @Override
+                protected void readResponse(InputStream input) throws IOException {
+                    responseString[0] = Util.readToString(input);
+                }
+            };
+            request.setUrl(Server_APIs.LOGIN);
+            request.setPost(true);
+            request.setContentType("application/x-www-form-urlencoded");
+            InfiniteProgress ip = new InfiniteProgress();
+            Dialog dig = ip.showInifiniteBlocking();
+            request.setDisposeOnCompletion(dig);
+            NetworkManager.getInstance().addToQueueAndWait(request);
+            if (request.getResponseCode() == 200) {
+                try {
+                    JSONArray jArray = new JSONArray(responseString[0]);
+                    if (jArray.length() == 0) {
+                        available = true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (available) {
+                ConnectionRequest connectionRequest = new ConnectionRequest() {
+                    @Override
+                    protected void buildRequestBody(OutputStream os) throws IOException {
+                        String send = "user=" + username +
+                                "&password=" + password +
+                                "&email=" + email +
+                                "&firstname=" + fname +
+                                "&lastname=" + lname +
+                                "&dateofbirth=" + date +
+                                "&gender=" + gender;
+                        os.write(send.getBytes());
+                    }
+
+                    @Override
+                    protected void readResponse(InputStream input) throws IOException {
+                        responseString[0] = Util.readToString(input);
+                    }
+                };
+                connectionRequest.setUrl(Server_APIs.NEWUSER);
+                connectionRequest.setContentType("application/x-www-form-urlencoded");
+                connectionRequest.setPost(true);
+                InfiniteProgress infiniteProgress = new InfiniteProgress();
+                Dialog dialog = infiniteProgress.showInifiniteBlocking();
+                connectionRequest.setDisposeOnCompletion(dialog);
+                NetworkManager.getInstance().addToQueueAndWait(connectionRequest);
+                if (connectionRequest.getResponseCode() == 200) {
+                    try {
+                        JSONObject jobj = new JSONObject(responseString[0]);
+                        if (jobj.getString("affected_rows").equals(Integer.toString(1))) {
+                            ConnectionRequest rquest = new ConnectionRequest();
+                            rquest.setPost(false);
+                            rquest.setUrl(Server_APIs.INITIATE);
+                            rquest.addArgument("user", username);
+                            InfiniteProgress p = new InfiniteProgress();
+                            Dialog ig = p.showInifiniteBlocking();
+                            rquest.setDisposeOnCompletion(ig);
+                            NetworkManager.getInstance().addToQueueAndWait(rquest);
+                            Preferences.set("username", username);
+                            Server_APIs.USERNAME = username;
+                            showForm("Main", null);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Dialog dialog = new Dialog();
+                dialog.add("Username not available");
+                dialog.setDialogType(Dialog.TYPE_ERROR);
+                dialog.setDisposeWhenPointerOutOfBounds(true);
+                dialog.show();
+            }
+        }
+    }
+
+    @Override
+    protected void postLoginForm(Form f) {
+        Picker picker = findSignupdatePicker();
+        picker.setType(Display.PICKER_TYPE_DATE);
+        picker.setFormatter(new SimpleDateFormat("yyyy-MM-dd"));
     }
 }
