@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="ScannedUser" cloudDestinationProperty="ScannedUser" layout="BorderLayout" borderLayoutAbsoluteCenter="false" >
+  <component type="List" name="scannedUserList" cloudDestinationProperty="List"  selectedRenderer="listRenderer" unselectedRenderer="listRenderer selectedRendererEven="listRenderer" unselectedRendererEven="listRenderer" >
+    <layoutConstraint value="Center" />
+  </component>
+</component>
