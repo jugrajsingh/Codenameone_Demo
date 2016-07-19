@@ -395,13 +395,6 @@ public class StateMachine extends StateMachineBase {
     }
 
     @Override
-    protected void postLoginForm(Form f) {
-        Picker picker = findSignupdatePicker();
-        picker.setType(Display.PICKER_TYPE_DATE);
-        picker.setFormatter(new SimpleDateFormat("yyyy-MM-dd"));
-    }
-
-    @Override
     protected void onMain_ScanitAction(Component c, ActionEvent event) {
         CodeScanner.getInstance().scanQRCode(new ScanResult() {
 
@@ -477,5 +470,12 @@ public class StateMachine extends StateMachineBase {
         Server_APIs.USERNAME = "DEFAULT";
         Preferences.set("username", "DEFAULT");
         showForm("LoginForm", null);
+    }
+
+    @Override
+    protected void beforeLoginForm(Form f) {
+        Picker picker = findSignupdatePicker(f);
+        picker.setType(Display.PICKER_TYPE_DATE);
+        picker.setFormatter(new SimpleDateFormat("yyyy-MM-dd"));
     }
 }
