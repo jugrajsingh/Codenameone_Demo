@@ -471,4 +471,11 @@ public class StateMachine extends StateMachineBase {
             f.revalidate();
         });
     }
+
+    @Override
+    protected void onMain_LogoutbuttonAction(Component c, ActionEvent event) {
+        Server_APIs.USERNAME = "DEFAULT";
+        Preferences.set("username", "DEFAULT");
+        showForm("LoginForm", null);
+    }
 }

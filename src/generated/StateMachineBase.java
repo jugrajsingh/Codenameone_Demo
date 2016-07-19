@@ -7,11 +7,13 @@
 */
 package generated;
 
+import com.codename1.io.Preferences;
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
+import com.singhjugraj.demo.Server_APIs;
 
 import java.util.Hashtable;
 
@@ -21,8 +23,8 @@ public abstract class StateMachineBase extends UIBuilder {
      * this method should be used to initialize variables instead of
      * the constructor/class scope to avoid race conditions
      */
+    public static final int COMMAND_MainLogout = 3;
     public static final int COMMAND_MainGoToDataEntry = 1;
-    public static final int COMMAND_MainLogin = 3;
     private Container aboutToShowThisContainer;
 
     public StateMachineBase(Resources res, String resPath, boolean loadTheme) {
@@ -98,7 +100,13 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
     protected String getFirstFormName() {
-        return "Main";
+        String username = Preferences.get("username", "DEFAULT");
+        if (username.equalsIgnoreCase("DEFAULT")) {
+            return "LoginForm";
+        } else {
+            Server_APIs.USERNAME = username;
+            return "Main";
+        }
     }
 
     public Container createWidget(Resources res, String resPath, boolean loadTheme) {
@@ -576,6 +584,18 @@ public abstract class StateMachineBase extends UIBuilder {
         return cmp;
     }
 
+    public com.codename1.ui.Button findLogoutbutton(Component root) {
+        return (com.codename1.ui.Button) findByName("logoutbutton", root);
+    }
+
+    public com.codename1.ui.Button findLogoutbutton() {
+        com.codename1.ui.Button cmp = (com.codename1.ui.Button) findByName("logoutbutton", Display.getInstance().getCurrent());
+        if (cmp == null && aboutToShowThisContainer != null) {
+            cmp = (com.codename1.ui.Button) findByName("logoutbutton", aboutToShowThisContainer);
+        }
+        return cmp;
+    }
+
     public com.codename1.ui.Label findLabel8(Component root) {
         return (com.codename1.ui.Label)findByName("Label8", root);
     }
@@ -668,18 +688,6 @@ public abstract class StateMachineBase extends UIBuilder {
         com.codename1.ui.Button cmp = (com.codename1.ui.Button)findByName("saveButton", Display.getInstance().getCurrent());
         if(cmp == null && aboutToShowThisContainer != null) {
             cmp = (com.codename1.ui.Button)findByName("saveButton", aboutToShowThisContainer);
-        }
-        return cmp;
-    }
-
-    public com.codename1.ui.Button findLoginbutton(Component root) {
-        return (com.codename1.ui.Button)findByName("loginbutton", root);
-    }
-
-    public com.codename1.ui.Button findLoginbutton() {
-        com.codename1.ui.Button cmp = (com.codename1.ui.Button)findByName("loginbutton", Display.getInstance().getCurrent());
-        if(cmp == null && aboutToShowThisContainer != null) {
-            cmp = (com.codename1.ui.Button)findByName("loginbutton", aboutToShowThisContainer);
         }
         return cmp;
     }
@@ -808,11 +816,11 @@ public abstract class StateMachineBase extends UIBuilder {
         return false;
     }
 
-    protected boolean onMainGoToDataEntry() {
+    protected boolean onMainLogout() {
         return false;
     }
 
-    protected boolean onMainLogin() {
+    protected boolean onMainGoToDataEntry() {
         return false;
     }
 
@@ -825,15 +833,15 @@ public abstract class StateMachineBase extends UIBuilder {
                 }
                 break;
 
-            case COMMAND_MainGoToDataEntry:
-                if(onMainGoToDataEntry()) {
+            case COMMAND_MainLogout:
+                if (onMainLogout()) {
                     ev.consume();
                     return;
                 }
                 break;
 
-            case COMMAND_MainLogin:
-                if(onMainLogin()) {
+            case COMMAND_MainGoToDataEntry:
+                if (onMainGoToDataEntry()) {
                     ev.consume();
                     return;
                 }
@@ -1526,8 +1534,8 @@ public abstract class StateMachineBase extends UIBuilder {
                 onMain_ScanitAction(c, event);
                 return;
             }
-            if("loginbutton".equals(c.getName())) {
-                onMain_LoginbuttonAction(c, event);
+            if ("logoutbutton".equals(c.getName())) {
+                onMain_LogoutbuttonAction(c, event);
                 return;
             }
         }
@@ -1629,7 +1637,7 @@ public abstract class StateMachineBase extends UIBuilder {
       protected void onMain_ScanitAction(Component c, ActionEvent event) {
       }
 
-      protected void onMain_LoginbuttonAction(Component c, ActionEvent event) {
+    protected void onMain_LogoutbuttonAction(Component c, ActionEvent event) {
       }
 
 }

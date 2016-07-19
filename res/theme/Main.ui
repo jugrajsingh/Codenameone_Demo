@@ -7,6 +7,6 @@
   </component>
   <component type="Button" name="scanit" cloudDestinationProperty="scanit" text="Scan QR Code" >
   </component>
-  <component type="Button" name="loginbutton" cloudDestinationProperty="loginbutton" commandName="Login" commandId="3" commandAction="LoginForm" commandBack="false" text="Login" >
+  <component type="Button" name="logoutbutton" cloudDestinationProperty="loginbutton" commandName="Logout" commandId="3" commandAction="LoginForm" commandBack="false" text="Logout" >
   </component>
 </component>
