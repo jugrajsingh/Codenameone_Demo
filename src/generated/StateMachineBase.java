@@ -7,13 +7,11 @@
 */
 package generated;
 
-import com.codename1.io.Preferences;
 import com.codename1.ui.*;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
-import com.singhjugraj.demo.Server_APIs;
 
 import java.util.Hashtable;
 
@@ -100,13 +98,7 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
     protected String getFirstFormName() {
-        String username = Preferences.get("username", "DEFAULT");
-        if (username.equalsIgnoreCase("DEFAULT")) {
-            return "LoginForm";
-        } else {
-            Server_APIs.USERNAME = username;
-            return "Main";
-        }
+        return "Main";
     }
 
     public Container createWidget(Resources res, String resPath, boolean loadTheme) {
@@ -412,6 +404,18 @@ public abstract class StateMachineBase extends UIBuilder {
         com.codename1.ui.TextField cmp = (com.codename1.ui.TextField)findByName("signupFirstname", Display.getInstance().getCurrent());
         if(cmp == null && aboutToShowThisContainer != null) {
             cmp = (com.codename1.ui.TextField)findByName("signupFirstname", aboutToShowThisContainer);
+        }
+        return cmp;
+    }
+
+    public com.codename1.ui.List findScannedUserList(Component root) {
+        return (com.codename1.ui.List) findByName("scannedUserList", root);
+    }
+
+    public com.codename1.ui.List findScannedUserList() {
+        com.codename1.ui.List cmp = (com.codename1.ui.List) findByName("scannedUserList", Display.getInstance().getCurrent());
+        if (cmp == null && aboutToShowThisContainer != null) {
+            cmp = (com.codename1.ui.List) findByName("scannedUserList", aboutToShowThisContainer);
         }
         return cmp;
     }
@@ -860,6 +864,12 @@ public abstract class StateMachineBase extends UIBuilder {
             return;
         }
 
+        if ("ScannedUser".equals(f.getName())) {
+            exitScannedUser(f);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
         if("listRenderer".equals(f.getName())) {
             exitListRenderer(f);
             aboutToShowThisContainer = null;
@@ -888,6 +898,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void exitScannedUser(Form f) {
+    }
+
+
     protected void exitListRenderer(Form f) {
     }
 
@@ -911,6 +925,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(f.getName())) {
             beforeLoginForm(f);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(f.getName())) {
+            beforeScannedUser(f);
             aboutToShowThisContainer = null;
             return;
         }
@@ -943,6 +963,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void beforeScannedUser(Form f) {
+    }
+
+
     protected void beforeListRenderer(Form f) {
     }
 
@@ -966,6 +990,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(c.getName())) {
             beforeContainerLoginForm(c);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(c.getName())) {
+            beforeContainerScannedUser(c);
             aboutToShowThisContainer = null;
             return;
         }
@@ -998,6 +1028,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void beforeContainerScannedUser(Container c) {
+    }
+
+
     protected void beforeContainerListRenderer(Container c) {
     }
 
@@ -1020,6 +1054,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(f.getName())) {
             postLoginForm(f);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(f.getName())) {
+            postScannedUser(f);
             aboutToShowThisContainer = null;
             return;
         }
@@ -1052,6 +1092,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void postScannedUser(Form f) {
+    }
+
+
     protected void postListRenderer(Form f) {
     }
 
@@ -1074,6 +1118,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(c.getName())) {
             postContainerLoginForm(c);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(c.getName())) {
+            postContainerScannedUser(c);
             aboutToShowThisContainer = null;
             return;
         }
@@ -1106,6 +1156,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void postContainerScannedUser(Container c) {
+    }
+
+
     protected void postContainerListRenderer(Container c) {
     }
 
@@ -1128,6 +1182,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(rootName)) {
             onCreateLoginForm();
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(rootName)) {
+            onCreateScannedUser();
             aboutToShowThisContainer = null;
             return;
         }
@@ -1160,6 +1220,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void onCreateScannedUser() {
+    }
+
+
     protected void onCreateListRenderer() {
     }
 
@@ -1183,6 +1247,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(f.getName())) {
             getStateLoginForm(f, h);
+            aboutToShowThisContainer = null;
+            return h;
+        }
+
+        if ("ScannedUser".equals(f.getName())) {
+            getStateScannedUser(f, h);
             aboutToShowThisContainer = null;
             return h;
         }
@@ -1215,6 +1285,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void getStateScannedUser(Form f, Hashtable h) {
+    }
+
+
     protected void getStateListRenderer(Form f, Hashtable h) {
     }
 
@@ -1238,6 +1312,12 @@ public abstract class StateMachineBase extends UIBuilder {
 
         if("LoginForm".equals(f.getName())) {
             setStateLoginForm(f, state);
+            aboutToShowThisContainer = null;
+            return;
+        }
+
+        if ("ScannedUser".equals(f.getName())) {
+            setStateScannedUser(f, state);
             aboutToShowThisContainer = null;
             return;
         }
@@ -1270,6 +1350,10 @@ public abstract class StateMachineBase extends UIBuilder {
     }
 
 
+    protected void setStateScannedUser(Form f, Hashtable state) {
+    }
+
+
     protected void setStateListRenderer(Form f, Hashtable state) {
     }
 
@@ -1282,10 +1366,17 @@ public abstract class StateMachineBase extends UIBuilder {
         if("List".equals(listName)) {
             return initListModelList(cmp);
         }
+        if ("scannedUserList".equals(listName)) {
+            return initListModelScannedUserList(cmp);
+        }
         return super.setListModel(cmp);
     }
 
     protected boolean initListModelList(List cmp) {
+        return false;
+    }
+
+    protected boolean initListModelScannedUserList(List cmp) {
         return false;
     }
 
@@ -1416,6 +1507,12 @@ public abstract class StateMachineBase extends UIBuilder {
                 return;
             }
         }
+        if (rootContainerName.equals("ScannedUser")) {
+            if ("scannedUserList".equals(c.getName())) {
+                onScannedUser_ScannedUserListAction(c, event);
+                return;
+            }
+        }
         if(rootContainerName.equals("Main")) {
             if("gotodataentry".equals(c.getName())) {
                 onMain_GotodataentryAction(c, event);
@@ -1518,6 +1615,9 @@ public abstract class StateMachineBase extends UIBuilder {
       }
 
       protected void onLoginForm_SignupSubmitAction(Component c, ActionEvent event) {
+      }
+
+    protected void onScannedUser_ScannedUserListAction(Component c, ActionEvent event) {
       }
 
       protected void onMain_GotodataentryAction(Component c, ActionEvent event) {

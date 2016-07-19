@@ -11,6 +11,8 @@ import ca.weblite.codename1.json.JSONArray;
 import ca.weblite.codename1.json.JSONException;
 import ca.weblite.codename1.json.JSONObject;
 import com.codename1.components.InfiniteProgress;
+import com.codename1.ext.codescan.CodeScanner;
+import com.codename1.ext.codescan.ScanResult;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.NetworkManager;
 import com.codename1.io.Preferences;
@@ -397,5 +399,76 @@ public class StateMachine extends StateMachineBase {
         Picker picker = findSignupdatePicker();
         picker.setType(Display.PICKER_TYPE_DATE);
         picker.setFormatter(new SimpleDateFormat("yyyy-MM-dd"));
+    }
+
+    @Override
+    protected void onMain_ScanitAction(Component c, ActionEvent event) {
+        CodeScanner.getInstance().scanQRCode(new ScanResult() {
+
+            @Override
+            public void scanCompleted(String s, String s1, byte[] bytes) {
+                Server_APIs.SCANNEDUSER = s;
+                showForm("ScannedUser", null);
+            }
+
+            @Override
+            public void scanCanceled() {
+                Dialog dialog = new Dialog();
+                dialog.add("SCAN FAILED or CANCELED");
+                dialog.setDialogType(Dialog.TYPE_ERROR);
+                dialog.setDisposeWhenPointerOutOfBounds(true);
+                dialog.show();
+            }
+
+            @Override
+            public void scanError(int i, String s) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void beforeScannedUser(Form f) {
+        List cmp = findScannedUserList();
+        final String[] responseString = {""};
+        ConnectionRequest request = new ConnectionRequest() {
+            @Override
+            protected void readResponse(InputStream input) throws IOException {
+                responseString[0] = Util.readToString(input);
+            }
+        };
+        request.setPost(false);
+        request.setUrl(Server_APIs.USERDATA);
+        request.addArgument("user", Server_APIs.SCANNEDUSER);
+        InfiniteProgress ip = new InfiniteProgress();
+        Dialog dig = ip.showInifiniteBlocking();
+        request.setDisposeOnCompletion(dig);
+        NetworkManager.getInstance().addToQueueAndWait(request);
+        if (request.getResponseCode() == 200) {
+            ArrayList<Hashtable<String, String>> a = new ArrayList<>();
+            try {
+                JSONArray jArray = new JSONArray(responseString[0]);
+                if (jArray.length() > 0) {
+                    JSONObject obj = jArray.getJSONObject(0);
+                    if (!obj.getString("user_data").equals("null")) {
+                        JSONArray jsonArray = new JSONArray(obj.getString("user_data"));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
+                            Hashtable<String, String> h = new Hashtable<>();
+                            h.put("type", object.getString("type"));
+                            h.put("data", object.getString("data"));
+                            a.add(h);
+                            cmp.setModel(new DefaultListModel<>(a));
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        cmp.addPullToRefresh(() -> {
+            beforeScannedUser(f);
+            f.revalidate();
+        });
     }
 }

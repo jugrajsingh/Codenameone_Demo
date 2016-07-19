@@ -128,6 +128,7 @@
     <ui name="OwnerDetails" />
     <image name="round.png" type="multi"  />
     <image name="round.png1" type="multi"  />
+    <ui name="ScannedUser"/>
     <image name="sliderBlueCenter.png" type="multi"  />
     <image name="sliderBlueCenter.png1" type="multi"  />
     <image name="sliderBlueLeft.png" type="multi"  />

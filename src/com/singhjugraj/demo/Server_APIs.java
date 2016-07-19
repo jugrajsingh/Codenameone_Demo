@@ -11,4 +11,5 @@ public class Server_APIs {
     public static String INITIATE = SERVERURL + "/initiate";
     public static String LOGIN = SERVERURL + "/login";
     public static String USERNAME = "DEFAULT";
+    public static String SCANNEDUSER = "";
 }
